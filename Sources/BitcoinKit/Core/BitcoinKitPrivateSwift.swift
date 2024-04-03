@@ -24,6 +24,7 @@
 
 import Foundation
 import secp256k1
+import BitcoinKitPrivate
 
 class _SwiftKey {
 	public static func computePublicKey(fromPrivateKey privateKey: Data, compression: Bool) -> Data {

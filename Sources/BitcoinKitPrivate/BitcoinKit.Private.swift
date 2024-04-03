@@ -37,7 +37,7 @@ public class _Hash {
         return Data(result)
     }
     
-    static func sha256ripemd160(_ data: Data) -> Data {
+    public static func sha256ripemd160(_ data: Data) -> Data {
         return ripemd160(sha256(data))
     }
     
@@ -182,9 +182,9 @@ public class _HDKey {
             //if BN_is_zero(privateKeyNum) {
             //    return nil
             //}
-            if privateKeyNum.pointee.top == 0 { // BN_is_zero
-                return nil
-            }
+//            if privateKeyNum.pointee.top == 0 { // BN_is_zero
+//                return nil
+//            }
             let numBytes = ((BN_num_bits(privateKeyNum)+7)/8) // BN_num_bytes
             var result = [UInt8](repeating: 0, count: Int(numBytes))
             BN_bn2bin(privateKeyNum, &result)
