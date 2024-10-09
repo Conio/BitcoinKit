@@ -476,7 +476,7 @@ extension Script {
     public static func buildPublicKeyHashOut(pubKeyHash: Data) -> Data {
         let tmp: Data = Data() + OpCode.OP_DUP + OpCode.OP_HASH160 + UInt8(pubKeyHash.count)
         let secondTmp = pubKeyHash + OpCode.OP_EQUALVERIFY
-        
+
         return tmp + secondTmp + OpCode.OP_CHECKSIG
     }
 

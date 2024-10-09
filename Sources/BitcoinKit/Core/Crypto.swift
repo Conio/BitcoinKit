@@ -24,19 +24,24 @@
 //
 
 import Foundation
-#if BitcoinKitXcode
-import BitcoinKit.Private
-#else
-import BitcoinKitPrivate
-#endif
+import CryptoSwift
+import secp256k1
+
+public struct Hash {
+    public static func hmacsha512(_ data: Data, key: Data) -> Data? {
+        let hmac = HMAC(key: key.bytes, variant: .sha2(.sha512))
+        guard let entropy = try? hmac.authenticate(data.bytes), entropy.count == 64 else { return nil }
+        return Data(entropy)
+    }
+}
 
 public struct Crypto {
     public static func sha1(_ data: Data) -> Data {
-        return _Hash.sha1(data)
+        return sha1(data)
     }
 
     public static func sha256(_ data: Data) -> Data {
-        return _Hash.sha256(data)
+        return sha256(data)
     }
 
     public static func sha256sha256(_ data: Data) -> Data {
@@ -44,7 +49,7 @@ public struct Crypto {
     }
 
     public static func ripemd160(_ data: Data) -> Data {
-        return _Hash.ripemd160(data)
+        return ripemd160(data)
     }
 
     public static func sha256ripemd160(_ data: Data) -> Data {
@@ -52,23 +57,53 @@ public struct Crypto {
     }
 
     public static func hmacsha512(data: Data, key: Data) -> Data {
-        return _Hash.hmacsha512(data, key: key)
+        return hmacsha512(data: data, key: key)
     }
 
     public static func sign(_ data: Data, privateKey: PrivateKey) throws -> Data {
-        #if BitcoinKitXcode
-        return _Crypto.signMessage(data, withPrivateKey: privateKey.data)
-        #else
-        return try _Crypto.signMessage(data, withPrivateKey: privateKey.data)
-        #endif
+        let ctx = secp256k1_context_create(UInt32(SECP256K1_CONTEXT_SIGN))!
+        defer { secp256k1_context_destroy(ctx) }
+        
+        let signature = UnsafeMutablePointer<secp256k1_ecdsa_signature>.allocate(capacity: 1)
+        defer { signature.deallocate() }
+        let status = data.withUnsafeBytes { (ptr: UnsafePointer<UInt8>) in
+            privateKey.data.withUnsafeBytes { secp256k1_ecdsa_sign(ctx, signature, ptr, $0, nil, nil) }
+        }
+        guard status == 1 else { throw CryptoError.signFailed }
+        
+        let normalizedsig = UnsafeMutablePointer<secp256k1_ecdsa_signature>.allocate(capacity: 1)
+        defer { normalizedsig.deallocate() }
+        secp256k1_ecdsa_signature_normalize(ctx, normalizedsig, signature)
+        
+        var length: size_t = 128
+        var der = Data(count: length)
+        guard der.withUnsafeMutableBytes({ return secp256k1_ecdsa_signature_serialize_der(ctx, $0, &length, normalizedsig) }) == 1 else { throw CryptoError.noEnoughSpace }
+        der.count = length
+        
+        return der
     }
 
     public static func verifySignature(_ signature: Data, message: Data, publicKey: Data) throws -> Bool {
-        #if BitcoinKitXcode
-        return _Crypto.verifySignature(signature, message: message, publicKey: publicKey)
-        #else
-        return try _Crypto.verifySignature(signature, message: message, publicKey: publicKey)
-        #endif
+        let ctx = secp256k1_context_create(UInt32(SECP256K1_CONTEXT_VERIFY))!
+        defer { secp256k1_context_destroy(ctx) }
+        
+        let signaturePointer = UnsafeMutablePointer<secp256k1_ecdsa_signature>.allocate(capacity: 1)
+        defer { signaturePointer.deallocate() }
+        guard signature.withUnsafeBytes({ secp256k1_ecdsa_signature_parse_der(ctx, signaturePointer, $0, signature.count) }) == 1 else {
+            throw CryptoError.signatureParseFailed
+        }
+        
+        let pubkeyPointer = UnsafeMutablePointer<secp256k1_pubkey>.allocate(capacity: 1)
+        defer { pubkeyPointer.deallocate() }
+        guard publicKey.withUnsafeBytes({ secp256k1_ec_pubkey_parse(ctx, pubkeyPointer, $0, publicKey.count) }) == 1 else {
+            throw CryptoError.publicKeyParseFailed
+        }
+        
+        guard message.withUnsafeBytes ({ secp256k1_ecdsa_verify(ctx, signaturePointer, $0, pubkeyPointer) }) == 1 else {
+            return false
+        }
+        
+        return true
     }
 
     public static func verifySigData(for tx: Transaction, inputIndex: Int, utxo: TransactionOutput, sigData: Data, pubKeyData: Data) throws -> Bool {
