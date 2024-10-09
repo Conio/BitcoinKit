@@ -23,13 +23,6 @@
 //  THE SOFTWARE.
 //
 
-import Foundation
-#if BitcoinKitXcode
-import BitcoinKit.Private
-#else
-import BitcoinKitPrivate
-#endif
-
 public class HDPrivateKey {
     public let network: Network
     public let depth: UInt8

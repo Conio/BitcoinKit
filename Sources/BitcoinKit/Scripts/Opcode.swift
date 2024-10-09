@@ -188,7 +188,7 @@ public enum OpCode: OpCodeProtocol {
     }
 }
 
-//public struct OpCode {
+// public struct OpCode {
 //    // 1. Operators pushing data on stack.
 //
 //    // Push 1 byte 0x00 on the stack
@@ -457,4 +457,4 @@ public enum OpCode: OpCodeProtocol {
 //    ]
 //
 //    internal init() {}
-//}
+// }
