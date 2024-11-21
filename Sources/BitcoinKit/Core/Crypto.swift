@@ -27,21 +27,13 @@ import Foundation
 import CryptoSwift
 import secp256k1
 
-public struct Hash {
-    public static func hmacsha512(_ data: Data, key: Data) -> Data? {
-        let hmac = HMAC(key: key.bytes, variant: .sha2(.sha512))
-        guard let entropy = try? hmac.authenticate(data.bytes), entropy.count == 64 else { return nil }
-        return Data(entropy)
-    }
-}
-
 public struct Crypto {
     public static func sha1(_ data: Data) -> Data {
-        return sha1(data)
+        return data.sha1()
     }
 
     public static func sha256(_ data: Data) -> Data {
-        return sha256(data)
+        return data.sha256()
     }
 
     public static func sha256sha256(_ data: Data) -> Data {
@@ -49,7 +41,7 @@ public struct Crypto {
     }
 
     public static func ripemd160(_ data: Data) -> Data {
-        return ripemd160(data)
+        return Ripemd160.hash(message: data)
     }
 
     public static func sha256ripemd160(_ data: Data) -> Data {
@@ -57,7 +49,7 @@ public struct Crypto {
     }
 
     public static func hmacsha512(data: Data, key: Data) -> Data {
-        return hmacsha512(data: data, key: key)
+        return HmacSha512.hash(data, key: key)!
     }
 
     public static func sign(_ data: Data, privateKey: PrivateKey) throws -> Data {
