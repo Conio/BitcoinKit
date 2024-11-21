@@ -206,6 +206,8 @@
 		6E20AED72112D417008A9810 /* MurmurHashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E20AED62112D417008A9810 /* MurmurHashTests.swift */; };
 		6E797C452116C8A5003BEDFD /* OpCodeFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E797C442116C8A5003BEDFD /* OpCodeFactoryTests.swift */; };
 		6EE789DB2112C1E500EAB620 /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE789DA2112C1E500EAB620 /* CryptoTests.swift */; };
+		84AD48542CEF37ED00858386 /* Hmac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AD48522CEF37ED00858386 /* Hmac.swift */; };
+		84AD48552CEF37ED00858386 /* Ripemd160.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AD48532CEF37ED00858386 /* Ripemd160.swift */; };
 		A201ABB6222ACF7100DEFE13 /* BitcoinKitPrivateSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = A201ABB5222ACF7100DEFE13 /* BitcoinKitPrivateSwift.swift */; };
 		CF432AF220F0CF9100AD4020 /* Base58Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF432AF120F0CF9100AD4020 /* Base58Tests.swift */; };
 		CF432AF420F0DFAC00AD4020 /* Bech32Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF432AF320F0DFAC00AD4020 /* Bech32Tests.swift */; };
@@ -434,6 +436,8 @@
 		6E20AED62112D417008A9810 /* MurmurHashTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MurmurHashTests.swift; sourceTree = "<group>"; };
 		6E797C442116C8A5003BEDFD /* OpCodeFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpCodeFactoryTests.swift; sourceTree = "<group>"; };
 		6EE789DA2112C1E500EAB620 /* CryptoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
+		84AD48522CEF37ED00858386 /* Hmac.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hmac.swift; sourceTree = "<group>"; };
+		84AD48532CEF37ED00858386 /* Ripemd160.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ripemd160.swift; sourceTree = "<group>"; };
 		A201ABB5222ACF7100DEFE13 /* BitcoinKitPrivateSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BitcoinKitPrivateSwift.swift; path = Core/BitcoinKitPrivateSwift.swift; sourceTree = "<group>"; };
 		CF432AF120F0CF9100AD4020 /* Base58Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base58Tests.swift; sourceTree = "<group>"; };
 		CF432AF320F0DFAC00AD4020 /* Bech32Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bech32Tests.swift; sourceTree = "<group>"; };
@@ -617,6 +621,7 @@
 		292AEA3C2112EB190012D7E5 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				84AD48512CEF37ED00858386 /* Cryptography */,
 				29AC9962214E898800AE82FE /* Keys */,
 				147494EB201F9E4F006D1CF8 /* Network.swift */,
 				1463E6B52025E99C0033DAAE /* BlockChain.swift */,
@@ -881,6 +886,15 @@
 			path = Keys;
 			sourceTree = "<group>";
 		};
+		84AD48512CEF37ED00858386 /* Cryptography */ = {
+			isa = PBXGroup;
+			children = (
+				84AD48522CEF37ED00858386 /* Hmac.swift */,
+				84AD48532CEF37ED00858386 /* Ripemd160.swift */,
+			);
+			path = Cryptography;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1004,6 +1018,7 @@
 				2933014D214FCE150028946B /* TransactionHistoryProvider.swift in Sources */,
 				0C1DE155211D787100FE8E43 /* OP_TOTALSTACK.swift in Sources */,
 				147494E6201F9BF0006D1CF8 /* Encoding.swift in Sources */,
+				84AD48542CEF37ED00858386 /* Hmac.swift in Sources */,
 				2949920220F228B400D078B6 /* UnspentTransaction.swift in Sources */,
 				0C0900442116BA8F0077E9BC /* OP_RSHIFT.swift in Sources */,
 				14839A7F202FE58800A6CB34 /* VersionMessage.swift in Sources */,
@@ -1115,6 +1130,7 @@
 				0C0900242116935E0077E9BC /* OP_MAX.swift in Sources */,
 				14839A95202FE6BE00A6CB34 /* GetBlocksMessage.swift in Sources */,
 				0C1DE159211D7FC800FE8E43 /* OP_IFDUP.swift in Sources */,
+				84AD48552CEF37ED00858386 /* Ripemd160.swift in Sources */,
 				298E17BA2150971800FF6C77 /* BitcoinComEndpoint.swift in Sources */,
 				2914BE56211BCFE600B349CB /* OP_NOPN.swift in Sources */,
 				14A2961F2032317B00E19177 /* HDWallet.swift in Sources */,
