@@ -97,7 +97,7 @@ class _HDKey {
 		}
 		var childIndex = CFSwapInt32HostToBig(hardened ? UInt32(0x80000000) | childIndex : childIndex)
 		data.append(Data(bytes: &childIndex, count: MemoryLayout<UInt32>.size))
-        guard let digest = Hash.hmacsha512(data, key: self.chainCode) else { return nil }
+        guard let digest = HmacSha512.hash(data, key: self.chainCode) else { return nil }
 		let derivedPrivateKey: [UInt8] = digest[0..<32].map { $0 }
 		let derivedChainCode: [UInt8] = digest[32..<64].map { $0 }
 		var result: Data
