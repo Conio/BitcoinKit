@@ -107,7 +107,7 @@ class _HDKey {
 			defer { secp256k1_context_destroy(ctx) }
 			var privateKeyBytes = privateKey.map{ $0 }
 			var derivedPrivateKeyBytes = derivedPrivateKey.map{ $0 }
-			if secp256k1_ec_privkey_tweak_add(ctx, &privateKeyBytes, &derivedPrivateKeyBytes) == 0 {
+			if secp256k1_ec_seckey_tweak_add(ctx, &privateKeyBytes, &derivedPrivateKeyBytes) == 0 {
 				return nil
 			}
 			result = Data(bytes: privateKeyBytes)
